@@ -200,7 +200,7 @@ class VertebraSegmentation()
       self.floodFillingFilterIsland.SetInValue(SELECTED_ISLAND_VALUE)
       self.floodFillingFilterIsland.ReplaceInOn()
       self.floodFillingFilterIsland.ReplaceOutOff()
-      self.floodFillingFilterIsland.ThresholdBetween(LABEL_VALUE, LABEL_VALUE)
+      self.floodFillingFilterIsland.ThresholdBetween(265.00, 1009.00)
       self.floodFillingFilterIsland.SetSeedPoints(seedPoints)
       self.floodFillingFilterIsland.Update()
 
@@ -248,3 +248,19 @@ class VertebraSegmentation()
     parameterSetNode.SetMasterVolumeIntensityMaskRange(oldIntensityMaskRange)
 
     qt.QApplication.restoreOverrideCursor()
+    
+    
+# Clean up
+segmentEditorWidget = None
+slicer.mrmlScene.RemoveNode(segmentEditorNode)
+
+# Make segmentation results visible in 3D
+segmentationNode.CreateClosedSurfaceRepresentation()
+
+
+# Write to STL file
+writer = vtk.vtkSTLWriter()
+writer.SetInputData("segmentation")
+writer.SetFileName("lumbar.stl")
+writer.Update()
+
